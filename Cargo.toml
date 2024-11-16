@@ -9,19 +9,26 @@ authors = ["Masato TOYOSHIMA <phoepsilonix@phoepsilonix.love"]
 
 [dependencies]
 gh-emoji = "1.0.8"
-once_cell = "1.19.0"
+#once_cell = "1.19.0"
 pulldown-cmark = { git = "https://github.com/raphlinus/pulldown-cmark.git", branch = "master"}
-syntect = { version = "5.2.0", default-features = false, features = ["default-fancy"] }
+#syntect = { version = "5.2.0", default-features = false, features = ["default-fancy"] }
 wasm-bindgen = "0.2.92"
 
 [dev-dependencies]
-syntect = "5.1.0"
+#syntect = "5.1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [package.metadata.wasm-pack.profile.release]
-wasm-opt = ["-Oz", "--enable-mutable-globals"]
+wasm-opt = ["-O3", "--enable-mutable-globals"]
 
 [package.metadata.wasm-pack.profile.dev]
-wasm-opt = ["-Oz", "--enable-mutable-globals"]
+wasm-opt = ["-O3", "--enable-mutable-globals"]
+
+[profile.release]
+strip = true
+lto = true
+overflow-checks = true
+codegen-units = 1
+panic = "abort"
