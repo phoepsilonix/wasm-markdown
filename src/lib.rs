@@ -1,7 +1,14 @@
+#![no_main]
+
+#[cfg(feature = "wee_alloc")] // wee_allocがfeatureに設定されたときに有効
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 use pulldown_cmark::{html, Event, Options, Parser, Tag, TagEnd, CodeBlockKind };
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+#[no_mangle]
 pub fn pulldown_cmark(text: &str) -> String {
     let mut opts = Options::empty();
     opts.insert(Options::ENABLE_TABLES);
