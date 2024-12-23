@@ -1,8 +1,33 @@
 #![no_main]
 
-#[cfg(feature = "wee_alloc")] // wee_allocがfeatureに設定されたときに有効
+#[cfg(all(
+        feature = "use-wee_alloc",
+        any(
+            not(any(target_arch = "arm", target_arch = "aarch64")),
+            all(target_arch = "aarch64", not(target_os = "windows"))
+        )
+))]
 #[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+static GLOBAL: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[cfg(all(
+        feature = "use-lol_alloc",
+        any(
+            not(any(target_arch = "arm", target_arch = "aarch64")),
+            all(target_arch = "aarch64", not(target_os = "windows"))
+        )
+))]
+use lol_alloc::{FreeListAllocator, LockedAllocator};
+
+#[cfg(all(
+        feature = "use-lol_alloc",
+        any(
+            not(any(target_arch = "arm", target_arch = "aarch64")),
+            all(target_arch = "aarch64", not(target_os = "windows"))
+        )
+))]
+#[global_allocator]
+static ALLOCATOR: LockedAllocator<FreeListAllocator> = LockedAllocator::new(FreeListAllocator::new());
 
 use pulldown_cmark::{html, Event, Options, Parser, Tag, TagEnd, CodeBlockKind };
 use wasm_bindgen::prelude::*;

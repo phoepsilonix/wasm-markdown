@@ -14,7 +14,9 @@ pulldown-cmark = { git = "https://github.com/raphlinus/pulldown-cmark.git", bran
 #syntect = { version = "5.2.0", default-features = false, features = ["default-fancy"] }
 wasm-bindgen = "0.2.92"
 #console_error_panic_hook = { version = "0.1.1", optional = true }
-wee_alloc = { version = "0.4.2", optional = true }
+wee_alloc = { version = "0.4.5", optional = true, git = "https://github.com/rustwasm/wee_alloc.git" }
+lol_alloc = { version = "0.4.1", optional = true }
+#tikv-jemallocator = { version = "0.6.0", optional = true }
 
 
 [dev-dependencies]
@@ -24,8 +26,10 @@ wee_alloc = { version = "0.4.2", optional = true }
 crate-type = ["cdylib", "rlib"]
 
 [features]
-#default = ["wee_alloc"]
-default = []
+#default = ["use-wee_alloc"]
+default = ["use-lol_alloc"]
+use-lol_alloc = ["dep:lol_alloc"]
+use-wee_alloc = ["dep:wee_alloc"]
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ["-O3", "--enable-mutable-globals"]
@@ -41,3 +45,4 @@ overflow-checks = true
 codegen-units = 1
 panic = "abort"
 opt-level = 3
+
